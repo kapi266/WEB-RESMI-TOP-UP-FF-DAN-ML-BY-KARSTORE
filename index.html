@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KarStore - Top Up Free Fire & Mobile Legend</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #3498db;
+            --secondary: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --success: #2ecc71;
+            --ml-color: #ff9a9e;
+            --ff-color: #a1c4fd;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, var(--ml-color), var(--ff-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .game-selection {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .game-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-btn.ml {
+            background: linear-gradient(45deg, var(--ml-color), #fad0c4);
+            color: #fff;
+        }
+
+        .game-btn.ff {
+            background: linear-gradient(45deg, var(--ff-color), #c2e9fb);
+            color: #fff;
+        }
+
+        .game-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .diamond-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .diamond-input input {
+            flex: 1;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .product-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .product-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-item.selected {
+            border: 2px solid var(--primary);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .payment-section {
+            display: none;
+        }
+
+        .payment-section.active {
+            display: block;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .payment-method {
+            flex: 1;
+            min-width: 120px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .payment-details {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .payment-details.active {
+            display: block;
+        }
+
+        .payment-info {
+            margin-bottom: 15px;
+        }
+
+        .payment-info img {
+            max-width: 200px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .proof-upload {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .proof-upload.active {
+            display: block;
+        }
+
+        .proof-preview {
+            max-width: 300px;
+            margin-top: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .btn-submit {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-info {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .whatsapp-btn {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            font-weight: bold;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .game-selection {
+                flex-direction: column;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .payment-methods {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">KarStore</div>
+            <div class="welcome-text">TOP UP FREE FIRE & MOBILE LEGEND</div>
+        </header>
+
+        <div class="card">
+            <h2 class="card-title">Pilih Game</h2>
+            <div class="game-selection">
+                <button class="game-btn ml active">
+                    <i class="fas fa-gamepad"></i> Mobile Legend
+                </button>
+                <button class="game-btn ff">
+                    <i class="fas fa-fire"></i> Free Fire
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Masukkan ID Game</h2>
+            <div class="form-group">
+                <label for="player-id">ID Game</label>
+                <input type="text" id="player-id" class="form-control" placeholder="Masukkan ID Game Anda">
+            </div>
+            <div class="form-group">
+                <label for="player-name">Nama Karakter</label>
+                <input type="text" id="player-name" class="form-control" placeholder="Masukkan Nama Karakter">
+            </div>
+            <div class="form-group">
+                <label for="player-server">Server ID (Opsional)</label>
+                <input type="text" id="player-server" class="form-control" placeholder="Contoh: 1234">
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Pilih Jumlah Diamond</h2>
+            <div class="form-group">
+                <label for="diamond-amount">Jumlah Diamond (5-3000)</label>
+                <div class="diamond-input">
+                    <input type="range" id="diamond-amount" class="form-control" min="5" max="3000" value="100" step="5">
+                    <span id="diamond-value">100</span>
+                </div>
+            </div>
+            <div class="product-grid" id="product-list">
+                <!-- Products will be loaded here based on game selection -->
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Metode Pembayaran</h2>
+            <div class="payment-methods">
+                <div class="payment-method" data-method="dana">
+                    <div class="payment-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div>DANA</div>
+                </div>
+                <div class="payment-method" data-method="gopay">
+                    <div class="payment-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div>GOPAY</div>
+                </div>
+                <div class="payment-method" data-method="qris">
+                    <div class="payment-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div>QRIS</div>
+                </div>
+                <div class="payment-method" data-method="bank">
+                    <div class="payment-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div>Transfer Bank</div>
+                </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="payment-details" id="dana-details">
+                <h3>Pembayaran via DANA</h3>
+                <div class="payment-info">
+                    <p>Nomor DANA: <strong>08217277855</strong></p>
+                    <p>Atas Nama: <strong>Lismaini</strong></p>
+                    <p>Total Pembayaran: <strong id="dana-total">Rp 0</strong></p>
+                </div>
+            </div>
+
+            <div class="payment-details" id="gopay-details">
+                <h3>Pembayaran via GOPAY</h3>
+                <div class="payment-info">
+                    <p>Nomor GOPAY: <strong>083187841507</strong></p>
+                    <p>Atas Nama: <strong>Lismaini</strong></p>
+                    <p>Total Pembayaran: <strong id="gopay-total">Rp 0</strong></p>
+                </div>
+            </div>
+
+            <div class="payment-details" id="qris-details">
+                <h3>Pembayaran via QRIS</h3>
+                <div class="payment-info">
+                    <p>Scan QR Code berikut:</p>
+                    <img src="https://files.catbox.moe/x62w86.jpg" alt="QRIS Payment">
+                    <p>Total Pembayaran: <strong id="qris-total">Rp 0</strong></p>
+                </div>
+            </div>
+
+            <div class="payment-details" id="bank-details">
+                <h3>Pembayaran via Transfer Bank</h3>
+                <div class="payment-info">
+                    <p>Silakan hubungi kami melalui WhatsApp untuk informasi pembayaran via bank.</p>
+                </div>
+            </div>
+
+            <!-- Proof Upload Section -->
+            <div class="proof-upload" id="proof-upload">
+                <h3>Unggah Bukti Transfer</h3>
+                <div class="form-group">
+                    <label for="proof-file">Pilih gambar bukti transfer</label>
+                    <input type="file" id="proof-file" class="form-control" accept="image/*">
+                    <small>Format: JPG, PNG, GIF (Maks. 5MB)</small>
+                </div>
+                <img id="proof-preview" class="proof-preview" src="" alt="Preview Bukti Transfer">
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Ringkasan Pesanan</h2>
+            <div class="order-summary">
+                <div class="summary-item">
+                    <span>Game:</span>
+                    <span id="summary-game">Mobile Legend</span>
+                </div>
+                <div class="summary-item">
+                    <span>ID Game:</span>
+                    <span id="summary-id">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Jumlah Diamond:</span>
+                    <span id="summary-diamond">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Metode Pembayaran:</span>
+                    <span id="summary-method">-</span>
+                </div>
+                <div class="summary-item summary-total">
+                    <span>Total Pembayaran:</span>
+                    <span id="summary-total">Rp 0</span>
+                </div>
+            </div>
+            
+            <button class="btn-submit" id="pay-button">Bayar Sekarang</button>
+        </div>
+
+        <div class="contact-info">
+            <h3>Butuh Bantuan?</h3>
+            <p>Hubungi kami melalui WhatsApp</p>
+            <a href="https://wa.me/6282117927716" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> 6282117927716
+            </a>
+        </div>
+
+        <div class="info-box">
+            <h3>Harga Sesuai dengan Aplikasi</h3>
+            <p>Kami menawarkan harga yang kompetitif sesuai dengan harga resmi di aplikasi game.</p>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 KarStore - Top Up Game Terpercaya</p>
+        </footer>
+    </div>
+
+    <script>
+        // Sample product data with more diamond options
+        const mlProducts = [
+            { id: 1, name: "5 Diamond", price: 2000, value: 5 },
+            { id: 2, name: "11 Diamond", price: 4000, value: 11 },
+            { id: 3, name: "17 Diamond", price: 6000, value: 17 },
+            { id: 4, name: "25 Diamond", price: 8000, value: 25 },
+            { id: 5, name: "39 Diamond", price: 12000, value: 39 },
+            { id: 6, name: "53 Diamond", price: 16000, value: 53 },
+            { id: 7, name: "70 Diamond", price: 20000, value: 70 },
+            { id: 8, name: "86 Diamond", price: 25000, value: 86 },
+            { id: 9, name: "100 Diamond", price: 30000, value: 100 },
+            { id: 10, name: "121 Diamond", price: 35000, value: 121 },
+            { id: 11, name: "172 Diamond", price: 50000, value: 172 },
+            { id: 12, name: "257 Diamond", price: 75000, value: 257 },
+            { id: 13, name: "344 Diamond", price: 100000, value: 344 },
+            { id: 14, name: "429 Diamond", price: 125000, value: 429 },
+            { id: 15, name: "514 Diamond", price: 150000, value: 514 },
+            { id: 16, name: "600 Diamond", price: 175000, value: 600 },
+            { id: 17, name: "706 Diamond", price: 200000, value: 706 },
+            { id: 18, name: "792 Diamond", price: 225000, value: 792 },
+            { id: 19, name: "878 Diamond", price: 250000, value: 878 },
+            { id: 20, name: "1000 Diamond", price: 285000, value: 1000 },
+            { id: 21, name: "1200 Diamond", price: 340000, value: 1200 },
+            { id: 22, name: "1400 Diamond", price: 395000, value: 1400 },
+            { id: 23, name: "1600 Diamond", price: 450000, value: 1600 },
+            { id: 24, name: "1800 Diamond", price: 505000, value: 1800 },
+            { id: 25, name: "2000 Diamond", price: 560000, value: 2000 },
+            { id: 26, name: "2200 Diamond", price: 615000, value: 2200 },
+            { id: 27, name: "2400 Diamond", price: 670000, value: 2400 },
+            { id: 28, name: "2600 Diamond", price: 725000, value: 2600 },
+            { id: 29, name: "2800 Diamond", price: 780000, value: 2800 },
+            { id: 30, name: "3000 Diamond", price: 835000, value: 3000 }
+        ];
+
+        const ffProducts = [
+            { id: 1, name: "5 Diamond", price: 1500, value: 5 },
+            { id: 2, name: "12 Diamond", price: 3000, value: 12 },
+            { id: 3, name: "20 Diamond", price: 5000, value: 20 },
+            { id: 4, name: "30 Diamond", price: 7000, value: 30 },
+            { id: 5, name: "40 Diamond", price: 9000, value: 40 },
+            { id: 6, name: "50 Diamond", price: 11000, value: 50 },
+            { id: 7, name: "60 Diamond", price: 13000, value: 60 },
+            { id: 8, name: "70 Diamond", price: 15000, value: 70 },
+            { id: 9, name: "80 Diamond", price: 17000, value: 80 },
+            { id: 10, name: "90 Diamond", price: 19000, value: 90 },
+            { id: 11, name: "100 Diamond", price: 21000, value: 100 },
+            { id: 12, name: "110 Diamond", price: 23000, value: 110 },
+            { id: 13, name: "120 Diamond", price: 25000, value: 120 },
+            { id: 14, name: "130 Diamond", price: 27000, value: 130 },
+            { id: 15, name: "140 Diamond", price: 29000, value: 140 },
+            { id: 16, name: "150 Diamond", price: 31000, value: 150 },
+            { id: 17, name: "160 Diamond", price: 33000, value: 160 },
+            { id: 18, name: "170 Diamond", price: 35000, value: 170 },
+            { id: 19, name: "180 Diamond", price: 37000, value: 180 },
+            { id: 20, name: "190 Diamond", price: 39000, value: 190 },
+            { id: 21, name: "200 Diamond", price: 41000, value: 200 },
+            { id: 22, name: "210 Diamond", price: 43000, value: 210 },
+            { id: 23, name: "220 Diamond", price: 45000, value: 220 },
+            { id: 24, name: "230 Diamond", price: 47000, value: 230 },
+            { id: 25, name: "240 Diamond", price: 49000, value: 240 },
+            { id: 26, name: "250 Diamond", price: 51000, value: 250 },
+            { id: 27, name: "260 Diamond", price: 53000, value: 260 },
+            { id: 28, name: "270 Diamond", price: 55000, value: 270 },
+            { id: 29, name: "280 Diamond", price: 57000, value: 280 },
+            { id: 30, name: "290 Diamond", price: 59000, value: 290 },
+            { id: 31, name: "300 Diamond", price: 61000, value: 300 },
+            { id: 32, name: "310 Diamond", price: 63000, value: 310 },
+            { id: 33, name: "320 Diamond", price: 65000, value: 320 },
+            { id: 34, name: "330 Diamond", price: 67000, value: 330 },
+            { id: 35, name: "340 Diamond", price: 69000, value: 340 },
+            { id: 36, name: "350 Diamond", price: 71000, value: 350 },
+            { id: 37, name: "360 Diamond", price: 73000, value: 360 },
+            { id: 38, name: "370 Diamond", price: 75000, value: 370 },
+            { id: 39, name: "380 Diamond", price: 77000, value: 380 },
+            { id: 40, name: "390 Diamond", price: 79000, value: 390 },
+            { id: 41, name: "400 Diamond", price: 81000, value: 400 },
+            { id: 42, name: "410 Diamond", price: 83000, value: 410 },
+            { id: 43, name: "420 Diamond", price: 85000, value: 420 },
+            { id: 44, name: "430 Diamond", price: 87000, value: 430 },
+            { id: 45, name: "440 Diamond", price: 89000, value: 440 },
+            { id: 46, name: "450 Diamond", price: 91000, value: 450 },
+            { id: 47, name: "460 Diamond", price: 93000, value: 460 },
+            { id: 48, name: "470 Diamond", price: 95000, value: 470 },
+            { id: 49, name: "480 Diamond", price: 97000, value: 480 },
+            { id: 50, name: "490 Diamond", price: 99000, value: 490 },
+            { id: 51, name: "500 Diamond", price: 101000, value: 500 },
+            { id: 52, name: "550 Diamond", price: 111000, value: 550 },
+            { id: 53, name: "600 Diamond", price: 121000, value: 600 },
+            { id: 54, name: "650 Diamond", price: 131000, value: 650 },
+            { id: 55, name: "700 Diamond", price: 141000, value: 700 },
+            { id: 56, name: "750 Diamond", price: 151000, value: 750 },
+            { id: 57, name: "800 Diamond", price: 161000, value: 800 },
+            { id: 58, name: "850 Diamond", price: 171000, value: 850 },
+            { id: 59, name: "900 Diamond", price: 181000, value: 900 },
+            { id: 60, name: "950 Diamond", price: 191000, value: 950 },
+            { id: 61, name: "1000 Diamond", price: 201000, value: 1000 },
+            { id: 62, name: "1100 Diamond", price: 221000, value: 1100 },
+            { id: 63, name: "1200 Diamond", price: 241000, value: 1200 },
+            { id: 64, name: "1300 Diamond", price: 261000, value: 1300 },
+            { id: 65, name: "1400 Diamond", price: 281000, value: 1400 },
+            { id: 66, name: "1500 Diamond", price: 301000, value: 1500 },
+            { id: 67, name: "1600 Diamond", price: 321000, value: 1600 },
+            { id: 68, name: "1700 Diamond", price: 341000, value: 1700 },
+            { id: 69, name: "1800 Diamond", price: 361000, value: 1800 },
+            { id: 70, name: "1900 Diamond", price: 381000, value: 1900 },
+            { id: 71, name: "2000 Diamond", price: 401000, value: 2000 },
+            { id: 72, name: "2100 Diamond", price: 421000, value: 2100 },
+            { id: 73, name: "2200 Diamond", price: 441000, value: 2200 },
+            { id: 74, name: "2300 Diamond", price: 461000, value: 2300 },
+            { id: 75, name: "2400 Diamond", price: 481000, value: 2400 },
+            { id: 76, name: "2500 Diamond", price: 501000, value: 2500 },
+            { id: 77, name: "2600 Diamond", price: 521000, value: 2600 },
+            { id: 78, name: "2700 Diamond", price: 541000, value: 2700 },
+            { id: 79, name: "2800 Diamond", price: 561000, value: 2800 },
+            { id: 80, name: "2900 Diamond", price: 581000, value: 2900 },
+            { id: 81, name: "3000 Diamond", price: 601000, value: 3000 }
+        ];
+
+        // DOM elements
+        const mlButton = document.querySelector('.game-btn.ml');
+        const ffButton = document.querySelector('.game-btn.ff');
+        const productList = document.getElementById('product-list');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const payButton = document.getElementById('pay-button');
+        const diamondAmount = document.getElementById('diamond-amount');
+        const diamondValue = document.getElementById('diamond-value');
+        const proofUpload = document.getElementById('proof-upload');
+        const proofFile = document.getElementById('proof-file');
+        const proofPreview = document.getElementById('proof-preview');
+        
+        // Order summary elements
+        const summaryGame = document.getElementById('summary-game');
+        const summaryId = document.getElementById('summary-id');
+        const summaryDiamond = document.getElementById('summary-diamond');
+        const summaryMethod = document.getElementById('summary-method');
+        const summaryTotal = document.getElementById('summary-total');
+        
+        // Payment details elements
+        const danaTotal = document.getElementById('dana-total');
+        const gopayTotal = document.getElementById('gopay-total');
+        const qrisTotal = document.getElementById('qris-total');
+
+        // State variables
+        let selectedGame = 'ml';
+        let selectedProduct = null;
+        let selectedPaymentMethod = null;
+        let customDiamondAmount = 100;
+
+        // Initialize with ML products
+        renderProducts(mlProducts);
+        updateCustomDiamondPrice();
+
+        // Game selection event
+        mlButton.addEventListener('click', () => {
+            mlButton.classList.add('active');
+            ffButton.classList.remove('active');
+            selectedGame = 'ml';
+            summaryGame.textContent = 'Mobile Legend';
+            renderProducts(mlProducts);
+            resetSelection();
+            updateCustomDiamondPrice();
+        });
+
+        ffButton.addEventListener('click', () => {
+            ffButton.classList.add('active');
+            mlButton.classList.remove('active');
+            selectedGame = 'ff';
+            summaryGame.textContent = 'Free Fire';
+            renderProducts(ffProducts);
+            resetSelection();
+            updateCustomDiamondPrice();
+        });
+
+        // Diamond amount slider
+        diamondAmount.addEventListener('input', () => {
+            customDiamondAmount = parseInt(diamondAmount.value);
+            diamondValue.textContent = customDiamondAmount;
+            updateCustomDiamondPrice();
+        });
+
+        // Payment method selection
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', () => {
+                paymentMethods.forEach(m => m.classList.remove('selected'));
+                method.classList.add('selected');
+                
+                selectedPaymentMethod = method.getAttribute('data-method');
+                summaryMethod.textContent = method.querySelector('div:last-child').textContent;
+                
+                // Show appropriate payment details
+                document.querySelectorAll('.payment-details').forEach(detail => {
+                    detail.classList.remove('active');
+                });
+                document.getElementById(`${selectedPaymentMethod}-details`).classList.add('active');
+                
+                // Show proof upload section
+                proofUpload.classList.add('active');
+                
+                updateOrderSummary();
+            });
+        });
+
+        // Proof file upload preview
+        proofFile.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    proofPreview.src = e.target.result;
+                    proofPreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Function to render products
+        function renderProducts(products) {
+            productList.innerHTML = '';
+            products.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product-item';
+                productElement.setAttribute('data-price', product.price);
+                productElement.setAttribute('data-value', product.value);
+                productElement.innerHTML = `
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
+                `;
+                productElement.addEventListener('click', () => {
+                    document.querySelectorAll('.product-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    productElement.classList.add('selected');
+                    
+                    selectedProduct = product;
+                    summaryDiamond.textContent = product.name;
+                    summaryTotal.textContent = `Rp ${product.price.toLocaleString('id-ID')}`;
+                    
+                    // Update payment details
+                    danaTotal.textContent = `Rp ${product.price.toLocaleString('id-ID')}`;
+                    gopayTotal.textContent = `Rp ${product.price.toLocaleString('id-ID')}`;
+                    qrisTotal.textContent = `Rp ${product.price.toLocaleString('id-ID')}`;
+                    
+                    updateOrderSummary();
+                });
+                productList.appendChild(productElement);
+            });
+        }
+        
+        // Bukti to payment 
+<div class="form-group proof-upload" style="display: none;">
+    <label for="proof">Unggah Bukti Transfer</label>
+    <input type="file" id="proof" class="form-control" accept="image/*">
+    <small>Unggah screenshot bukti transfer pembayaran Anda</small>
+</div>
+
+        // Function to update custom diamond price
+        function updateCustomDiamondPrice() {
+            // Calculate price based on diamond amount and game
+            let pricePerDiamond = selectedGame === 'ml' ? 280 : 200; // Average price per diamond
+            let calculatedPrice = customDiamondAmount * pricePerDiamond;
+            
+            // Adjust for bulk discounts
+            if (customDiamondAmount >= 1000) {
+                calculatedPrice *= 0.9; // 10% discount for 1000+ diamonds
+            } else if (customDiamondAmount >= 500) {
+                calculatedPrice *= 0.95; // 5% discount for 500+ diamonds
+            }
+            
+            // Round to nearest thousand
+            calculatedPrice = Math.round(calculatedPrice / 1000) * 1000;
+            
+            // Update diamond value display
+            diamondValue.textContent = customDiamondAmount;
+            
+            // Update payment details if custom diamond is selected
+            if (!selectedProduct) {
+                summaryDiamond.textContent = `${customDiamondAmount} Diamond`;
+                summaryTotal.textContent = `Rp ${calculatedPrice.toLocaleString('id-ID')}`;
+                
+                danaTotal.textContent = `Rp ${calculatedPrice.toLocaleString('id-ID')}`;
+                gopayTotal.textContent = `Rp ${calculatedPrice.toLocaleString('id-ID')}`;
+                qrisTotal.textContent = `Rp ${calculatedPrice.toLocaleString('id-ID')}`;
+                
+                updateOrderSummary();
+            }
+        }
+
+        // Update ID game when input changes
+        document.getElementById('player-id').addEventListener('input', (e) => {
+            summaryId.textContent = e.target.value || '-';
+        });
+
+        // Function to update order summary
+        function updateOrderSummary() {
+            if (selectedProduct) {
+                summaryTotal.textContent = `Rp ${selectedProduct.price.toLocaleString('id-ID')}`;
+            }
+        }
+
+        // Function to reset selection when game changes
+        function resetSelection() {
+            selectedProduct = null;
+            selectedPaymentMethod = null;
+            customDiamondAmount = 100;
+            diamondAmount.value = 100;
+            diamondValue.textContent = '100';
+            
+            document.querySelectorAll('.product-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            paymentMethods.forEach(m => m.classList.remove('selected'));
+            
+            document.querySelectorAll('.payment-details').forEach(detail => {
+                detail.classList.remove('active');
+            });
+            
+            proofUpload.classList.remove('active');
+            proofFile.value = '';
+            proofPreview.style.display = 'none';
+            
+            summaryDiamond.textContent = '-';
+            summaryMethod.textContent = '-';
+            summaryTotal.textContent = 'Rp 0';
+            
+            danaTotal.textContent = 'Rp 0';
+            gopayTotal.textContent = 'Rp 0';
+            qrisTotal.textContent = 'Rp 0';
+        }
+
+        // Pay button handler
+        payButton.addEventListener('click', () => {
+            const playerId = document.getElementById('player-id').value;
+            const playerName = document.getElementById('player-name').value;
+            const proofFileValue = document.getElementById('proof-file').value;
+            
+            if (!playerId || !playerName) {
+                alert('Harap masukkan ID Game dan Nama Karakter!');
+                return;
+            }
+            
+            if (!selectedProduct && customDiamondAmount < 5) {
+                alert('Harap pilih jumlah diamond yang valid (minimal 5 diamond)!');
+                return;
+            }
+            
+            if (!selectedPaymentMethod) {
+                alert('Harap pilih metode pembayaran!');
+                return;
+            }
+            
+            if (!proofFileValue) {
+                alert('Harap unggah bukti transfer!');
+                return;
+            }
+            
+            // Simulate payment process
+            alert('Pesanan Anda sedang diproses! Silakan tunggu konfirmasi via WhatsApp.');
+            
+            // Redirect to WhatsApp
+            const gameName = selectedGame === 'ml' ? 'Mobile Legend' : 'Free Fire';
+            const diamondAmount = selectedProduct ? selectedProduct.value : customDiamondAmount;
+            const totalPrice = selectedProduct ? selectedProduct.price : (diamondAmount * (selectedGame === 'ml' ? 280 : 200));
+            
+            const message = `Halo, saya ingin top up ${gameName}%0AID: ${playerId}%0ANama: ${playerName}%0ADiamond: ${diamondAmount}%0ATotal: Rp ${totalPrice.toLocaleString('id-ID')}%0AMetode: ${selectedPaymentMethod.toUpperCase()}`;
+            window.open(`https://wa.me/6282117927716?text=${message}`, '_blank');
+        });
+    </script>
+</body>
+</html>
